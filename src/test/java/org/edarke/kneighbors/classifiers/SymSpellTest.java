@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class SymSpellTest {
 
-    SymSpell<String> sym = new SymSpell<>(3, StringMetrics.INSERTION_DISTANCE, SymSpell.LookupType.ALL_WITHIN_RANGE);
+    SymSpell<String> sym = new SymSpell<>(3, StringMetrics.DAMERAU_LEVENSHTEIN, SymSpell.LookupType.ALL_WITHIN_RANGE);
 
 
     public SymSpellTest() {
@@ -21,7 +21,7 @@ public class SymSpellTest {
 
     @Test
     public void testSymSpell(){
-        assertTrue(sym.lookup("sujestion", 3).stream().anyMatch(m -> m.getValue().equals("suggestion") && m.getDistance() == 3));
+        assertTrue(sym.lookup("sujestion", 3).stream().anyMatch(m -> m.getValue().equals("suggestion") && m.getDistance() == 2));
         assertTrue(sym.lookup("conputer", 3).stream().anyMatch(m -> m.getValue().equals("computer") && m.getDistance() == 1));
         assertTrue(sym.lookup("wosh", 1).stream().anyMatch(m -> m.getValue().equals("wash") && m.getDistance() == 1));
         assertTrue(sym.lookup("antidisestableshmentarianysm", 3).stream().anyMatch(m -> m.getValue().equals("antidisestablishmentarianism") && m.getDistance() == 2));
