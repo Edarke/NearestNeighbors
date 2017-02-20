@@ -1,11 +1,9 @@
-package org.edarke.kneighbors;
+package org.edarke.kneighbors.classifiers;
 
-import com.google.common.collect.Ordering;
+import org.edarke.kneighbors.metrics.StringMetrics;
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.Collectors;
-import org.edarke.kneighbors.classifiers.Match;
-import org.edarke.kneighbors.classifiers.VpTree;
-import org.edarke.kneighbors.metrics.Metric;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,28 +13,20 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Evan on 2/5/17.
  */
-public abstract class MetricTestHelper extends TestHelper {
+public class BkTreeTest extends TestHelper {
 
-
-    VpTree<String> vpt;
-
-    protected MetricTestHelper(Metric<? super String> metric) {
-        vpt = VpTree.create(dataset, metric);
-        System.out.println(this.getClass() + " size: " + vpt.size());
+    BkTree<String> bkt = new BkTree<>(StringMetrics.HAMMING_DISTANCE, dataset.get(0));
+    {
+        dataset.subList(1, dataset.size()).forEach(bkt::add);
     }
 
 
-    @Test
-    public void test_dataset_size_preserved(){
-        assertEquals(dataset.size(), vpt.size());
-    }
 
 
     @Test
     public void test3NN(){
-        List<Match<String>> matches = vpt.getNearestNeighbors("impossiblw", 3);
+        Queue<Match<String>> matches = bkt.getAllWithinRadius("impossiblw", 3);
         System.out.println(matches);
-        assertEquals(3, matches.size());
 
         assertTrue(matches.removeIf(m -> m.getValue().equals("impossible")));
         assertTrue(matches.removeIf(m -> m.getValue().equals("impossibly")));
@@ -46,12 +36,13 @@ public abstract class MetricTestHelper extends TestHelper {
 
     @Test
     public void test_cat(){
-        List<Match<String>> matches = vpt.getNearestNeighbors("cat", 500);
+        Queue<Match<String>> matches = bkt.getAllWithinRadius("cat", 150);
+
         System.out.println(matches);
-        assertTrue(Ordering.natural().isOrdered(matches));
+
         assertFalse(matches.isEmpty());
-        assertEquals("cat", matches.get(0).getValue());
-        assertEquals(0, matches.get(0).getDistance());
+        assertEquals(matches.peek().getValue(), "cat");
+        assertEquals(matches.peek().getDistance(), 0);
 
 
         List<String> values = matches.stream().map(Match::getValue).collect(Collectors.toList());
@@ -70,6 +61,7 @@ public abstract class MetricTestHelper extends TestHelper {
         assertTrue(values.contains("car"));
         assertTrue(values.contains("cap"));
     }
+
 
 
 }

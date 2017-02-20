@@ -1,13 +1,14 @@
-package org.edarke.kneighbors;
+package org.edarke.kneighbors.classifiers;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.io.Files.readLines;
 
 /**
  * Created by Evan on 2/5/17.
@@ -15,15 +16,19 @@ import static com.google.common.io.Files.readLines;
 public abstract class TestHelper {
 
     public static List<String> dataset;
+    public static List<String> smallDataset;
 
     static {
         try {
-            dataset = readLines(new File("/usr/share/dict/words"), Charset.defaultCharset());
+            dataset = Files.readAllLines(Paths.get("/usr/share/dict/words"), Charset.defaultCharset());
             dataset = new ArrayList<>(new HashSet<>(dataset));
+            smallDataset = Files.readAllLines(Paths.get(TestHelper.class.getResource("/uniq.txt").toURI()));
             System.out.println("File Size is " + dataset.size());
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
+
+
 
 }

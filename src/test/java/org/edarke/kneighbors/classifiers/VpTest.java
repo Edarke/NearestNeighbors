@@ -1,9 +1,7 @@
-package org.edarke.kneighbors;
+package org.edarke.kneighbors.classifiers;
 
 import java.util.Collections;
 import java.util.List;
-import org.edarke.kneighbors.classifiers.Match;
-import org.edarke.kneighbors.classifiers.VpTree;
 import org.edarke.kneighbors.metrics.StringMetrics;
 import org.junit.Test;
 
@@ -12,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Evan on 2/5/17.
  */
-public class VpTest extends TestHelper {
+public class VpTest {
 
 
 

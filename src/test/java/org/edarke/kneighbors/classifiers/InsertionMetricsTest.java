@@ -1,4 +1,4 @@
-package org.edarke.kneighbors;
+package org.edarke.kneighbors.classifiers;
 
 import org.edarke.kneighbors.metrics.StringMetrics;
 

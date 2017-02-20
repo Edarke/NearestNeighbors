@@ -1,7 +1,5 @@
 package org.edarke.kneighbors.classifiers;
 
-import com.google.common.base.Preconditions;
-import com.sun.istack.internal.Nullable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +8,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import org.eclipse.jdt.annotation.Nullable;
 import org.edarke.kneighbors.metrics.Metric;
 
 /**
@@ -77,8 +76,6 @@ public class VpTreeImpl<T> implements VpTree<T> {
 
 
     public List<Match<T>> getNearestNeighbors(T sample, int k, int maxDistance) {
-        Preconditions.checkArgument(k != 0, "K cannot be zero in K-Nearest Neighbors");
-
         List<Match<T>> neighbors = new ArrayList<Match<T>>() {
             @Override
             public boolean add(Match<T> match) {

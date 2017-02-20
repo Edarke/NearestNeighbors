@@ -2,16 +2,17 @@ package org.edarke.kneighbors.bench;
 
 import com.eatthepath.jvptree.DistanceFunction;
 import com.eatthepath.jvptree.VPTree;
-import org.edarke.kneighbors.classifiers.BkTree;
-import org.edarke.kneighbors.metrics.StringMetrics;
-import org.edarke.kneighbors.classifiers.VpTree;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import org.edarke.kneighbors.classifiers.BkTree;
+import org.edarke.kneighbors.classifiers.VpTree;
+import org.edarke.kneighbors.metrics.StringMetrics;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Level;
@@ -20,7 +21,6 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 
-import static com.google.common.io.Files.readLines;
 
 /**
  * Created by Evan on 2/8/17.
@@ -42,7 +42,7 @@ public class Test100k {
         @Setup(Level.Invocation)
         public void doSetup(){
             try {
-                dataset = readLines(new File("/usr/share/dict/words"), Charset.defaultCharset());
+                dataset = Files.readAllLines(Paths.get("/usr/share/dict/words"), Charset.defaultCharset());
                 dataset = new ArrayList<>(new HashSet<>(dataset));
                 mine = VpTree.create(dataset, StringMetrics.LEVENSHTEIN_DISTANCE);
                 jvpt = new VPTree<>(new JvpDistance(), dataset);
